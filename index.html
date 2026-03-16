@@ -74,7 +74,7 @@
     <script>
         document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
         function toggleHistory(btn) { const list = btn.nextElementSibling; list.classList.toggle('open'); btn.textContent = list.classList.contains('open') ? '📅 Hide History' : '📅 View History'; }
-        const reportHistory = {"android/stage":["2026-03-16T19-46-17","2026-03-16T19-29-58"],"ios/stage":["2026-03-16T20-02-16","2026-03-16T19-49-39","2026-03-16T19-36-00"],"ios/rc":["2026-03-16T20-09-14"]};
+        const reportHistory = {"android/stage":["2026-03-16T20-20-34","2026-03-16T19-46-17","2026-03-16T19-29-58"],"ios/stage":["2026-03-16T20-02-16","2026-03-16T19-49-39","2026-03-16T19-36-00"],"ios/rc":["2026-03-16T20-09-14"]};
         Object.keys(reportHistory).forEach(key => {
             const container = document.getElementById('history-' + key.replace('/', '-'));
             if (container && reportHistory[key]) {
