@@ -1,0 +1,51 @@
+name: Publish Allure Report
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform'
+        required: true
+        default: 'android'
+        type: choice
+        options:
+          - android
+          - ios
+
+  # Allow external triggers via repository_dispatch
+  repository_dispatch:
+    types: [publish-report]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Allure Report artifact
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          github_token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+          repo: Usoro999/DP
+          workflow: android-tests.yml
+          name: allure-report-android
+          path: ./reports/android/
+        if: github.event.inputs.platform == 'android' || github.event.client_payload.platform == 'android'
+
+      - name: Create index.html
+        run: |
+          mkdir -p reports
+          echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=android/"></head></html>' > reports/index.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./reports
+          keep_files: true
